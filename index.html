@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>web-audio-api-spec-checker</title>
+</head>
+<body>
+  <pre id="puts"></pre>
+  <script>
+  window.addEventListener("DOMContentLoaded", function() {
+    "use strict";
+
+    function puts(line) {
+      document.getElementById("puts").innerText += line + "\n";
+    }
+
+    function pushBaseClass(klass) {
+      if (typeof klass === "function") {
+        var baseClass = Object.getPrototypeOf(klass);
+
+        if (typeof baseClass === "function" && !env[baseClass.name]) {
+          env[baseClass.name] = baseClass;
+        }
+      }
+    }
+
+    var env = {};
+
+    Object.getOwnPropertyNames(window).forEach(function(name) {
+      if (/^[A-Z][a-zA-Z]+$/.test(name) && typeof window[name] === "function") {
+        env[name] = window[name];
+      }
+    });
+
+    env["AudioContext"] = window.AudioContext || window.webkitAudioContext;
+    env["OfflineAudioContext"] = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+
+    pushBaseClass(env["OfflineAudioContext"]);
+    pushBaseClass(env["OscillatorNode"]);
+
+    if (!env["PannerNode"]) {
+      try {
+        env["PannerNode"] = new env["OfflineAudioContext"](1, 1024, 44100).createPanner().constructor;
+      } catch (e) {}
+    }
+
+    if (!env["StereoPannerNode"]) {
+      try {
+        env["StereoPannerNode"] = new env["OfflineAudioContext"](1, 1024, 44100).createStereoPanner().constructor;
+      } catch (e) {}
+    }
+
+    var classList = [
+      "BaseAudioContext",
+      "AudioContext",
+      "OfflineAudioContext",
+      "AudioNode",
+      "AudioSourceNode",
+      "AudioDestinationNode",
+      "AudioParam",
+      "GainNode",
+      "DelayNode",
+      "AudioBuffer",
+      "AudioBufferSourceNode",
+      "MediaElementAudioSourceNode",
+      "ScriptProcessorNode",
+      "PannerNode",
+      "AudioListener",
+      "SpatialPannerNode",
+      "SpatialListener",
+      "StereoPannerNode",
+      "ConvolverNode",
+      "AnalyserNode",
+      "ChannelSplitterNode",
+      "ChannelMergerNode",
+      "DynamicsCompressorNode",
+      "BiquadFilterNode",
+      "IIRFilterNode",
+      "WaveShaperNode",
+      "OscillatorNode",
+      "PeriodicWave",
+      "MediaStreamAudioSourceNode",
+      "MediaStreamAudioDestinationNode",
+    ];
+
+    puts('// ' + window.navigator.userAgent);
+    puts('');
+    puts('const fullName = "";');
+    puts('');
+    puts('const apiSpec = {');
+
+    classList.forEach(function(className) {
+      if (env[className]) {
+        if (window[className]) {
+          puts('  "/' + className + '": { global: "' + className + '" },');
+        } else {
+          puts('  "/' + className + '": { global: false },');
+        }
+        Object.getOwnPropertyNames(env[className].prototype).forEach(function(methodName) {
+          if (methodName === "constructor") {
+            return;
+          }
+          puts('  "/' + className + '/' + methodName + '": {},');
+        });
+        puts('');
+      }
+    });
+
+    puts('};');
+    puts('');
+    puts('module.exports = { fullName, apiSpec };');
+  });
+  </script>
+</body>
+</html>
