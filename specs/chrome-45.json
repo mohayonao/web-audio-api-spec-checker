@@ -1,9 +1,5 @@
-"use strict";
-
-const fullName = "chrome:45";
-
-const apiSpec = {
-  "/AudioContext": { global: "AudioContext" },
+{
+  "/AudioContext": { "global": "AudioContext" },
   "/AudioContext/destination": {},
   "/AudioContext/currentTime": {},
   "/AudioContext/sampleRate": {},
@@ -34,11 +30,11 @@ const apiSpec = {
   "/AudioContext/suspend": {},
   "/AudioContext/resume": {},
 
-  "/OfflineAudioContext": { global: "OfflineAudioContext" },
+  "/OfflineAudioContext": { "global": "OfflineAudioContext" },
   "/OfflineAudioContext/oncomplete": {},
   "/OfflineAudioContext/startRendering": {},
 
-  "/AudioNode": { global: "AudioNode" },
+  "/AudioNode": { "global": "AudioNode" },
   "/AudioNode/context": {},
   "/AudioNode/numberOfInputs": {},
   "/AudioNode/numberOfOutputs": {},
@@ -48,12 +44,12 @@ const apiSpec = {
   "/AudioNode/connect": {},
   "/AudioNode/disconnect": {},
 
-  "/AudioSourceNode": { global: false },
+  "/AudioSourceNode": { "global": false },
 
-  "/AudioDestinationNode": { global: "AudioDestinationNode" },
+  "/AudioDestinationNode": { "global": "AudioDestinationNode" },
   "/AudioDestinationNode/maxChannelCount": {},
 
-  "/AudioParam": { global: "AudioParam" },
+  "/AudioParam": { "global": "AudioParam" },
   "/AudioParam/value": {},
   "/AudioParam/defaultValue": {},
   "/AudioParam/setValueAtTime": {},
@@ -63,13 +59,13 @@ const apiSpec = {
   "/AudioParam/setValueCurveAtTime": {},
   "/AudioParam/cancelScheduledValues": {},
 
-  "/GainNode": { global: "GainNode" },
+  "/GainNode": { "global": "GainNode" },
   "/GainNode/gain": {},
 
-  "/DelayNode": { global: "DelayNode" },
+  "/DelayNode": { "global": "DelayNode" },
   "/DelayNode/delayTime": {},
 
-  "/AudioBuffer": { global: "AudioBuffer" },
+  "/AudioBuffer": { "global": "AudioBuffer" },
   "/AudioBuffer/length": {},
   "/AudioBuffer/duration": {},
   "/AudioBuffer/sampleRate": {},
@@ -78,7 +74,7 @@ const apiSpec = {
   "/AudioBuffer/copyFromChannel": {},
   "/AudioBuffer/copyToChannel": {},
 
-  "/AudioBufferSourceNode": { global: "AudioBufferSourceNode" },
+  "/AudioBufferSourceNode": { "global": "AudioBufferSourceNode" },
   "/AudioBufferSourceNode/buffer": {},
   "/AudioBufferSourceNode/playbackRate": {},
   "/AudioBufferSourceNode/detune": {},
@@ -89,14 +85,14 @@ const apiSpec = {
   "/AudioBufferSourceNode/start": {},
   "/AudioBufferSourceNode/stop": {},
 
-  "/MediaElementAudioSourceNode": { global: "MediaElementAudioSourceNode" },
+  "/MediaElementAudioSourceNode": { "global": "MediaElementAudioSourceNode" },
   "/MediaElementAudioSourceNode/mediaElement": {},
 
-  "/ScriptProcessorNode": { global: "ScriptProcessorNode" },
+  "/ScriptProcessorNode": { "global": "ScriptProcessorNode" },
   "/ScriptProcessorNode/onaudioprocess": {},
   "/ScriptProcessorNode/bufferSize": {},
 
-  "/PannerNode": { global: false },
+  "/PannerNode": { "global": false },
   "/PannerNode/panningModel": {},
   "/PannerNode/distanceModel": {},
   "/PannerNode/refDistance": {},
@@ -109,21 +105,21 @@ const apiSpec = {
   "/PannerNode/setOrientation": {},
   "/PannerNode/setVelocity": {},
 
-  "/AudioListener": { global: "AudioListener" },
+  "/AudioListener": { "global": "AudioListener" },
   "/AudioListener/dopplerFactor": {},
   "/AudioListener/speedOfSound": {},
   "/AudioListener/setPosition": {},
   "/AudioListener/setOrientation": {},
   "/AudioListener/setVelocity": {},
 
-  "/StereoPannerNode": { global: false },
+  "/StereoPannerNode": { "global": false },
   "/StereoPannerNode/pan": {},
 
-  "/ConvolverNode": { global: "ConvolverNode" },
+  "/ConvolverNode": { "global": "ConvolverNode" },
   "/ConvolverNode/buffer": {},
   "/ConvolverNode/normalize": {},
 
-  "/AnalyserNode": { global: "AnalyserNode" },
+  "/AnalyserNode": { "global": "AnalyserNode" },
   "/AnalyserNode/fftSize": {},
   "/AnalyserNode/frequencyBinCount": {},
   "/AnalyserNode/minDecibels": {},
@@ -134,11 +130,11 @@ const apiSpec = {
   "/AnalyserNode/getFloatTimeDomainData": {},
   "/AnalyserNode/getByteTimeDomainData": {},
 
-  "/ChannelSplitterNode": { global: "ChannelSplitterNode" },
+  "/ChannelSplitterNode": { "global": "ChannelSplitterNode" },
 
-  "/ChannelMergerNode": { global: "ChannelMergerNode" },
+  "/ChannelMergerNode": { "global": "ChannelMergerNode" },
 
-  "/DynamicsCompressorNode": { global: "DynamicsCompressorNode" },
+  "/DynamicsCompressorNode": { "global": "DynamicsCompressorNode" },
   "/DynamicsCompressorNode/threshold": {},
   "/DynamicsCompressorNode/knee": {},
   "/DynamicsCompressorNode/ratio": {},
@@ -146,7 +142,7 @@ const apiSpec = {
   "/DynamicsCompressorNode/attack": {},
   "/DynamicsCompressorNode/release": {},
 
-  "/BiquadFilterNode": { global: "BiquadFilterNode" },
+  "/BiquadFilterNode": { "global": "BiquadFilterNode" },
   "/BiquadFilterNode/type": {},
   "/BiquadFilterNode/frequency": {},
   "/BiquadFilterNode/detune": {},
@@ -154,11 +150,11 @@ const apiSpec = {
   "/BiquadFilterNode/gain": {},
   "/BiquadFilterNode/getFrequencyResponse": {},
 
-  "/WaveShaperNode": { global: "WaveShaperNode" },
+  "/WaveShaperNode": { "global": "WaveShaperNode" },
   "/WaveShaperNode/curve": {},
   "/WaveShaperNode/oversample": {},
 
-  "/OscillatorNode": { global: "OscillatorNode" },
+  "/OscillatorNode": { "global": "OscillatorNode" },
   "/OscillatorNode/type": {},
   "/OscillatorNode/frequency": {},
   "/OscillatorNode/detune": {},
@@ -167,14 +163,11 @@ const apiSpec = {
   "/OscillatorNode/stop": {},
   "/OscillatorNode/setPeriodicWave": {},
 
-  "/PeriodicWave": { global: "PeriodicWave" },
+  "/PeriodicWave": { "global": "PeriodicWave" },
 
-  "/MediaStreamAudioSourceNode": { global: "MediaStreamAudioSourceNode" },
+  "/MediaStreamAudioSourceNode": { "global": "MediaStreamAudioSourceNode" },
   "/MediaStreamAudioSourceNode/mediaStream": {},
 
-  "/MediaStreamAudioDestinationNode": { global: "MediaStreamAudioDestinationNode" },
-  "/MediaStreamAudioDestinationNode/stream": {},
-
-};
-
-module.exports = { fullName, apiSpec };
+  "/MediaStreamAudioDestinationNode": { "global": "MediaStreamAudioDestinationNode" },
+  "/MediaStreamAudioDestinationNode/stream": {}
+}
