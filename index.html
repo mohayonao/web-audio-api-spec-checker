@@ -38,17 +38,44 @@
     pushBaseClass(env["OfflineAudioContext"]);
     pushBaseClass(env["OscillatorNode"]);
 
-    if (!env["PannerNode"]) {
-      try {
-        env["PannerNode"] = new env["OfflineAudioContext"](1, 1024, 44100).createPanner().constructor;
-      } catch (e) {}
-    }
+    var methodList = {
+      "createBuffer": { className: "AudioBuffer", args: [ 1, 128, 44100 ] },
+      "createBufferSource": { className: "AudioBufferSourceNode", args: [] },
+      "createGain": { className: "GainNode", args: [] },
+      "createDelay": { className: "DelayNode", args: [] },
+      "createBiquadFilter": { className: "BiquadFilterNode", args: [] },
+      "createIIRFilter": { className: "IIRFilterNode", args: [ new Float32Array([1,1], new Float32Array([1,1])) ] },
+      "createWaveShaper": { className: "WaveShaperNode", args: [] },
+      "createPanner": { className: "PannerNode", args: [] },
+      "createConvolver": { className: "ConvolverNode", args: [] },
+      "createDynamicsCompressor": { className: "DynamicsCompressorNode", args: [] },
+      "createAnalyser": { className: "AnalyserNode", args: [] },
+      "createScriptProcessor": { className: "ScriptProcessorNode", args: [ 1024, 1, 1 ] },
+      "createStereoPanner": { className: "StereoPannerNode", args: [] },
+      "createOscillator": { className: "OscillatorNode", args: [] },
+      "createPeriodicWave": { className: "PeriodicWave", args: [ new Float32Array(4), new Float32Array(4) ] },
+      "createChannelSplitter": { className: "ChannelSplitterNode", args: [] },
+      "createChannelMerger": { className: "ChannelMergerNode", args: [] },
+      "createSpatialPanner": { className: "SpatialPannerNode", args: [] },
+      "createJavaScriptNode": { className: "JavaScriptNode", args: [ 1024, 1, 1 ] },
+    };
 
-    if (!env["StereoPannerNode"]) {
-      try {
-        env["StereoPannerNode"] = new env["OfflineAudioContext"](1, 1024, 44100).createStereoPanner().constructor;
-      } catch (e) {}
-    }
+    var context = new env["OfflineAudioContext"](1, 1024, 44100);
+
+    Object.keys(methodList).forEach(function(methodName) {
+      var className = methodList[methodName].className;
+      var args = methodList[methodName].args;
+      if (!env[className] && context[methodName]) {
+        try {
+          var node = context[methodName].apply(context, args);
+          var klass = node.constructor;
+
+          env[klass.name || className] = klass;
+        } catch (e) {
+          console.error(methodName, e);
+        }
+      }
+    });
 
     var classList = [
       "BaseAudioContext",
@@ -64,6 +91,7 @@
       "AudioBufferSourceNode",
       "MediaElementAudioSourceNode",
       "ScriptProcessorNode",
+      "JavaScriptNode",
       "PannerNode",
       "AudioListener",
       "SpatialPannerNode",
@@ -85,16 +113,14 @@
 
     puts('// ' + window.navigator.userAgent);
     puts('');
-    puts('const fullName = "";');
-    puts('');
-    puts('const apiSpec = {');
+    puts('{');
 
     classList.forEach(function(className) {
       if (env[className]) {
         if (window[className]) {
-          puts('  "/' + className + '": { global: "' + className + '" },');
+          puts('  "/' + className + '": { "global": "' + className + '" },');
         } else {
-          puts('  "/' + className + '": { global: false },');
+          puts('  "/' + className + '": { "global": false },');
         }
         Object.getOwnPropertyNames(env[className].prototype).forEach(function(methodName) {
           if (methodName === "constructor") {
@@ -106,9 +132,7 @@
       }
     });
 
-    puts('};');
-    puts('');
-    puts('module.exports = { fullName, apiSpec };');
+    puts('}');
   });
   </script>
 </body>
