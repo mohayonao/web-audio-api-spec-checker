@@ -122,7 +122,7 @@
         } else {
           puts('  "/' + className + '": { "global": false },');
         }
-        Object.getOwnPropertyNames(env[className].prototype).forEach(function(methodName) {
+        Object.getOwnPropertyNames(env[className].prototype).sort().forEach(function(methodName) {
           if (methodName === "constructor") {
             return;
           }
