@@ -235,7 +235,6 @@
       "/OscillatorNode/UNSCHEDULED_STATE": { "deprecated": true },
       "/OscillatorNode/noteOff": { "deprecated": true },
       "/OscillatorNode/noteOn": { "deprecated": true },
-      "/OscillatorNode/onended": { "deprecated": true },
       "/OscillatorNode/playbackState": { "deprecated": true },
     };
 
@@ -264,7 +263,7 @@
       if (env[className]) {
         var data = {};
 
-        data["global"] = window[className] ? className : false;
+        data["global"] = window[className] ? className : window["webkit" + className] ? "webkit" + className : false;
 
         try {
           new env[className]();
