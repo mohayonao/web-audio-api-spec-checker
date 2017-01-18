@@ -169,10 +169,6 @@
     var specCheckList = {
       "/BaseAudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
 
-      "/AudioContext/activeSourceCount": { "deprecated": true },
-      "/AudioContext/createDelayNode": { "deprecated": true },
-      "/AudioContext/createGainNode": { "deprecated": true },
-      "/AudioContext/createJavaScriptNode": { "deprecated": true },
       "/AudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
       "/AudioContext/startRendering": { "void": true },
 
@@ -182,60 +178,12 @@
       "/AudioParam/cancelScheduledValues": checkAudioParam("cancelScheduledValues", [ 0 ]),
       "/AudioParam/exponentialRampToValueAtTime": checkAudioParam("exponentialRampToValueAtTime", [ 0.1, 0 ]),
       "/AudioParam/linearRampToValueAtTime": checkAudioParam("linearRampToValueAtTime", [ 0, 0 ]),
-      "/AudioParam/name": { "deprecated": true },
       "/AudioParam/setTargetAtTime": checkAudioParam("setTargetAtTime", [ 0, 0, 0.1 ]),
-      "/AudioParam/setTargetValueAtTime": { "void": true, "deprecated": true },
+      "/AudioParam/setTargetValueAtTime": { "void": true },
       "/AudioParam/setValueAtTime": checkAudioParam("setValueAtTime", [ 0, 0 ]),
       "/AudioParam/setValueCurveAtTime": checkAudioParam("setValueCurveAtTime", [ new Float32Array(8), 0, 1 ]),
-      "/AudioParam/units": { "deprecated": true },
-
-      "/AudioBuffer/gain": { "deprecated": true },
-
-      "/AudioBufferSourceNode/FINISHED_STATE": { "deprecated": true },
-      "/AudioBufferSourceNode/PLAYING_STATE": { "deprecated": true },
-      "/AudioBufferSourceNode/SCHEDULED_STATE": { "deprecated": true },
-      "/AudioBufferSourceNode/UNSCHEDULED_STATE": { "deprecated": true },
-      "/AudioBufferSourceNode/gain": { "deprecated": true },
-      "/AudioBufferSourceNode/looping": { "deprecated": true },
-      "/AudioBufferSourceNode/noteGrainOn": { "deprecated": true },
-      "/AudioBufferSourceNode/noteOff": { "deprecated": true },
-      "/AudioBufferSourceNode/noteOn": { "deprecated": true },
-      "/AudioBufferSourceNode/playbackState": { "deprecated": true },
-
-      "/PannerNode/EQUALPOWER": { "deprecated": true },
-      "/PannerNode/EXPONENTIAL_DISTANCE": { "deprecated": true },
-      "/PannerNode/HRTF": { "deprecated": true },
-      "/PannerNode/INVERSE_DISTANCE": { "deprecated": true },
-      "/PannerNode/LINEAR_DISTANCE": { "deprecated": true },
-      "/PannerNode/SOUNDFIELD": { "deprecated": true },
-
-      "/AudioListener/dopplerFactor": { "deprecated": true },
-      "/AudioListener/setVelocity": { "deprecated": true },
-      "/AudioListener/speedOfSound": { "deprecated": true },
 
       "/DynamicsCompressorNode/reduction": checkDynamicsCompressorNodeReduction,
-
-      "/BiquadFilterNode/ALLPASS": { "deprecated": true },
-      "/BiquadFilterNode/BANDPASS": { "deprecated": true },
-      "/BiquadFilterNode/HIGHPASS": { "deprecated": true },
-      "/BiquadFilterNode/HIGHSHELF": { "deprecated": true },
-      "/BiquadFilterNode/LOWPASS": { "deprecated": true },
-      "/BiquadFilterNode/LOWSHELF": { "deprecated": true },
-      "/BiquadFilterNode/NOTCH": { "deprecated": true },
-      "/BiquadFilterNode/PEAKING": { "deprecated": true },
-
-      "/OscillatorNode/CUSTOM": { "deprecated": true },
-      "/OscillatorNode/FINISHED_STATE": { "deprecated": true },
-      "/OscillatorNode/PLAYING_STATE": { "deprecated": true },
-      "/OscillatorNode/SAWTOOTH": { "deprecated": true },
-      "/OscillatorNode/SCHEDULED_STATE": { "deprecated": true },
-      "/OscillatorNode/SINE": { "deprecated": true },
-      "/OscillatorNode/SQUARE": { "deprecated": true },
-      "/OscillatorNode/TRIANGLE": { "deprecated": true },
-      "/OscillatorNode/UNSCHEDULED_STATE": { "deprecated": true },
-      "/OscillatorNode/noteOff": { "deprecated": true },
-      "/OscillatorNode/noteOn": { "deprecated": true },
-      "/OscillatorNode/playbackState": { "deprecated": true },
     };
 
     var audioContext = new env["AudioContext"]();
