@@ -14,6 +14,16 @@
       document.getElementById("puts").innerText += line + "\n";
     }
 
+    function stringify(object) {
+      if (Object.keys(object).length === 0) {
+        return "{}";
+      }
+      return JSON.stringify(object)
+        .replace("{", "{ ")
+        .replace(/(:|,)/g, "$1 ")
+        .replace("}", " }");
+    }
+
     function pushBaseClass(klass) {
       if (typeof klass === "function") {
         var baseClass = Object.getPrototypeOf(klass);
@@ -37,45 +47,7 @@
 
     pushBaseClass(env["OfflineAudioContext"]);
     pushBaseClass(env["OscillatorNode"]);
-
-    var methodList = {
-      "createBuffer": { className: "AudioBuffer", args: [ 1, 128, 44100 ] },
-      "createBufferSource": { className: "AudioBufferSourceNode", args: [] },
-      "createGain": { className: "GainNode", args: [] },
-      "createDelay": { className: "DelayNode", args: [] },
-      "createBiquadFilter": { className: "BiquadFilterNode", args: [] },
-      "createIIRFilter": { className: "IIRFilterNode", args: [ new Float32Array([1,1], new Float32Array([1,1])) ] },
-      "createWaveShaper": { className: "WaveShaperNode", args: [] },
-      "createPanner": { className: "PannerNode", args: [] },
-      "createConvolver": { className: "ConvolverNode", args: [] },
-      "createDynamicsCompressor": { className: "DynamicsCompressorNode", args: [] },
-      "createAnalyser": { className: "AnalyserNode", args: [] },
-      "createScriptProcessor": { className: "ScriptProcessorNode", args: [ 1024, 1, 1 ] },
-      "createStereoPanner": { className: "StereoPannerNode", args: [] },
-      "createOscillator": { className: "OscillatorNode", args: [] },
-      "createPeriodicWave": { className: "PeriodicWave", args: [ new Float32Array(4), new Float32Array(4) ] },
-      "createChannelSplitter": { className: "ChannelSplitterNode", args: [] },
-      "createChannelMerger": { className: "ChannelMergerNode", args: [] },
-      "createSpatialPanner": { className: "SpatialPannerNode", args: [] },
-      "createJavaScriptNode": { className: "JavaScriptNode", args: [ 1024, 1, 1 ] },
-    };
-
-    var context = new env["OfflineAudioContext"](1, 1024, 44100);
-
-    Object.keys(methodList).forEach(function(methodName) {
-      var className = methodList[methodName].className;
-      var args = methodList[methodName].args;
-      if (!env[className] && context[methodName]) {
-        try {
-          var node = context[methodName].apply(context, args);
-          var klass = node.constructor;
-
-          env[klass.name || className] = klass;
-        } catch (e) {
-          console.error(methodName, e);
-        }
-      }
-    });
+    pushBaseClass(env["MediaElementAudioSourceNode"]);
 
     var classList = [
       "BaseAudioContext",
@@ -111,22 +83,220 @@
       "MediaStreamAudioDestinationNode",
     ];
 
+    var constructorList = {
+      "createBuffer": { className: "AudioBuffer", args: [ 1, 128, 44100 ] },
+      "createBufferSource": { className: "AudioBufferSourceNode", args: [] },
+      "createGain": { className: "GainNode", args: [] },
+      "createDelay": { className: "DelayNode", args: [] },
+      "createBiquadFilter": { className: "BiquadFilterNode", args: [] },
+      "createIIRFilter": { className: "IIRFilterNode", args: [ new Float32Array([1,1], new Float32Array([1,1])) ] },
+      "createWaveShaper": { className: "WaveShaperNode", args: [] },
+      "createPanner": { className: "PannerNode", args: [] },
+      "createConvolver": { className: "ConvolverNode", args: [] },
+      "createDynamicsCompressor": { className: "DynamicsCompressorNode", args: [] },
+      "createAnalyser": { className: "AnalyserNode", args: [] },
+      "createScriptProcessor": { className: "ScriptProcessorNode", args: [ 1024, 1, 1 ] },
+      "createStereoPanner": { className: "StereoPannerNode", args: [] },
+      "createOscillator": { className: "OscillatorNode", args: [] },
+      "createPeriodicWave": { className: "PeriodicWave", args: [ new Float32Array(4), new Float32Array(4) ] },
+      "createChannelSplitter": { className: "ChannelSplitterNode", args: [] },
+      "createChannelMerger": { className: "ChannelMergerNode", args: [] },
+      "createSpatialPanner": { className: "SpatialPannerNode", args: [] },
+      "createJavaScriptNode": { className: "JavaScriptNode", args: [ 1024, 1, 1 ] },
+      "createMediaElementSource": { className: "MediaElementAudioSourceNode", args: [ new Audio() ] },
+      "createMediaStreamDestination": { className: "MediaStreamAudioDestinationNode", args: [] },
+    };
+
+    function checkBaseAudioContextDecodeAudioData(audioContex) {
+      var silent = new Uint32Array([
+        0x46464952, 0x00000038, 0x45564157, 0x20746d66,
+        0x00000010, 0x00010001, 0x0000ac44, 0x00015888,
+        0x00100002, 0x61746164, 0x00000014, 0x00000000,
+        0x00000000, 0x00000000, 0x00000000, 0x00000000,
+      ]).buffer;
+
+      if (audioContext.decodeAudioData(silent, function() {}, function() {})) {
+        return { "promise": true };
+      }
+    }
+
+    function checkAudioNodeConnect(audioContext) {
+      var gain = audioContext.createGain();
+      var data = {};
+
+      if (gain.connect(audioContext.destination)) {
+        data = { "chain": true };
+      }
+
+      gain.disconnect();
+
+      return data;
+    }
+
+    function checkAudioNodeDisconnect(audioContext) {
+      var gain = audioContext.createGain();
+      var selective = false;
+
+      try {
+        gain.disconnect(audioContext.destination);
+      } catch (e) {
+        selective = true;
+      }
+
+      if (selective === true) {
+        return { "selective": true };
+      }
+    }
+
+    function checkAudioParam(mehtodName, args) {
+      return function(audioContext) {
+        var gain = audioContext.createGain();
+
+        if (gain.gain[mehtodName].apply(gain.gain, args)) {
+          return { "chain": true };
+        }
+      }
+    }
+
+    function checkDynamicsCompressorNodeReduction(audioContext) {
+      var compressor = audioContext.createDynamicsCompressor();
+
+      if (typeof compressor.reduction === "number") {
+        return { "number": true };
+      }
+    }
+
+    var specCheckList = {
+      "/BaseAudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
+
+      "/AudioContext/activeSourceCount": { "deprecated": true },
+      "/AudioContext/createDelayNode": { "deprecated": true },
+      "/AudioContext/createGainNode": { "deprecated": true },
+      "/AudioContext/createJavaScriptNode": { "deprecated": true },
+      "/AudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
+      "/AudioContext/startRendering": { "void": true },
+
+      "/AudioNode/connect": checkAudioNodeConnect,
+      "/AudioNode/disconnect": checkAudioNodeDisconnect,
+
+      "/AudioParam/cancelScheduledValues": checkAudioParam("cancelScheduledValues", [ 0 ]),
+      "/AudioParam/exponentialRampToValueAtTime": checkAudioParam("exponentialRampToValueAtTime", [ 0.1, 0 ]),
+      "/AudioParam/linearRampToValueAtTime": checkAudioParam("linearRampToValueAtTime", [ 0, 0 ]),
+      "/AudioParam/name": { "deprecated": true },
+      "/AudioParam/setTargetAtTime": checkAudioParam("setTargetAtTime", [ 0, 0, 0.1 ]),
+      "/AudioParam/setTargetValueAtTime": { "void": true, "deprecated": true },
+      "/AudioParam/setValueAtTime": checkAudioParam("setValueAtTime", [ 0, 0 ]),
+      "/AudioParam/setValueCurveAtTime": checkAudioParam("setValueCurveAtTime", [ new Float32Array(8), 0, 1 ]),
+      "/AudioParam/units": { "deprecated": true },
+
+      "/AudioBuffer/gain": { "deprecated": true },
+
+      "/AudioBufferSourceNode/FINISHED_STATE": { "deprecated": true },
+      "/AudioBufferSourceNode/PLAYING_STATE": { "deprecated": true },
+      "/AudioBufferSourceNode/SCHEDULED_STATE": { "deprecated": true },
+      "/AudioBufferSourceNode/UNSCHEDULED_STATE": { "deprecated": true },
+      "/AudioBufferSourceNode/gain": { "deprecated": true },
+      "/AudioBufferSourceNode/looping": { "deprecated": true },
+      "/AudioBufferSourceNode/noteGrainOn": { "deprecated": true },
+      "/AudioBufferSourceNode/noteOff": { "deprecated": true },
+      "/AudioBufferSourceNode/noteOn": { "deprecated": true },
+      "/AudioBufferSourceNode/playbackState": { "deprecated": true },
+
+      "/PannerNode/EQUALPOWER": { "deprecated": true },
+      "/PannerNode/EXPONENTIAL_DISTANCE": { "deprecated": true },
+      "/PannerNode/HRTF": { "deprecated": true },
+      "/PannerNode/INVERSE_DISTANCE": { "deprecated": true },
+      "/PannerNode/LINEAR_DISTANCE": { "deprecated": true },
+      "/PannerNode/SOUNDFIELD": { "deprecated": true },
+
+      "/AudioListener/dopplerFactor": { "deprecated": true },
+      "/AudioListener/setVelocity": { "deprecated": true },
+      "/AudioListener/speedOfSound": { "deprecated": true },
+
+      "/DynamicsCompressorNode/reduction": checkDynamicsCompressorNodeReduction,
+
+      "/BiquadFilterNode/ALLPASS": { "deprecated": true },
+      "/BiquadFilterNode/BANDPASS": { "deprecated": true },
+      "/BiquadFilterNode/HIGHPASS": { "deprecated": true },
+      "/BiquadFilterNode/HIGHSHELF": { "deprecated": true },
+      "/BiquadFilterNode/LOWPASS": { "deprecated": true },
+      "/BiquadFilterNode/LOWSHELF": { "deprecated": true },
+      "/BiquadFilterNode/NOTCH": { "deprecated": true },
+      "/BiquadFilterNode/PEAKING": { "deprecated": true },
+
+      "/OscillatorNode/CUSTOM": { "deprecated": true },
+      "/OscillatorNode/FINISHED_STATE": { "deprecated": true },
+      "/OscillatorNode/PLAYING_STATE": { "deprecated": true },
+      "/OscillatorNode/SAWTOOTH": { "deprecated": true },
+      "/OscillatorNode/SCHEDULED_STATE": { "deprecated": true },
+      "/OscillatorNode/SINE": { "deprecated": true },
+      "/OscillatorNode/SQUARE": { "deprecated": true },
+      "/OscillatorNode/TRIANGLE": { "deprecated": true },
+      "/OscillatorNode/UNSCHEDULED_STATE": { "deprecated": true },
+      "/OscillatorNode/noteOff": { "deprecated": true },
+      "/OscillatorNode/noteOn": { "deprecated": true },
+      "/OscillatorNode/onended": { "deprecated": true },
+      "/OscillatorNode/playbackState": { "deprecated": true },
+    };
+
+    var audioContext = new env["AudioContext"]();
+
+    Object.keys(constructorList).forEach(function(methodName) {
+      var className = constructorList[methodName].className;
+      var args = constructorList[methodName].args;
+      if (!env[className] && audioContext[methodName]) {
+        try {
+          var node = audioContext[methodName].apply(audioContext, args);
+          var klass = node.constructor;
+
+          env[klass.name || className] = klass;
+        } catch (e) {
+          console.error(methodName, e);
+        }
+      }
+    });
+
     puts('// ' + window.navigator.userAgent);
     puts('');
     puts('{');
 
     classList.forEach(function(className) {
       if (env[className]) {
-        if (window[className]) {
-          puts('  "/' + className + '": { "global": "' + className + '" },');
-        } else {
-          puts('  "/' + className + '": { "global": false },');
+        var data = {};
+
+        data["global"] = window[className] ? className : false;
+
+        try {
+          new env[className]();
+        } catch (e) {
+          if (/illegal constructor/i.test(e.message)) {
+            data["protected"] = true;
+          }
         }
+
+        if (className === "AudioBuffer") {
+          try {
+            new AudioBuffer(audioContext, { numberOfChannels: 1, length: 128, sampleRate: 44100 });
+            data["context"] = true;
+          } catch (e) {}
+        }
+
+        puts('  "/' + className + '": ' + stringify(data) + ',');
+
         Object.getOwnPropertyNames(env[className].prototype).sort().forEach(function(methodName) {
           if (methodName === "constructor") {
             return;
           }
-          puts('  "/' + className + '/' + methodName + '": {},');
+          var apiPath = "/" + className + "/" + methodName;
+          var data = {};
+
+          if (typeof specCheckList[apiPath] === "function") {
+            Object.assign(data, specCheckList[apiPath](audioContext));
+          } else if (typeof specCheckList[apiPath] === "object") {
+            Object.assign(data, specCheckList[apiPath]);
+          }
+
+          puts('  "' + apiPath + '": ' + stringify(data) + ',');
         });
         puts('');
       }
