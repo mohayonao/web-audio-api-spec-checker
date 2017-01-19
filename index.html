@@ -107,15 +107,23 @@
       "createMediaStreamDestination": { className: "MediaStreamAudioDestinationNode", args: [] },
     };
 
-    function checkBaseAudioContextDecodeAudioData(audioContex) {
-      var silent = new Uint32Array([
-        0x46464952, 0x00000038, 0x45564157, 0x20746d66,
-        0x00000010, 0x00010001, 0x0000ac44, 0x00015888,
-        0x00100002, 0x61746164, 0x00000014, 0x00000000,
-        0x00000000, 0x00000000, 0x00000000, 0x00000000,
-      ]).buffer;
+    var SILENT_WAV = new Uint32Array([
+      0x46464952, 0x00000038, 0x45564157, 0x20746d66,
+      0x00000010, 0x00010001, 0x0000ac44, 0x00015888,
+      0x00100002, 0x61746164, 0x00000014, 0x00000000,
+      0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    ]).buffer;
 
-      if (audioContext.decodeAudioData(silent, function() {}, function() {})) {
+    function checkBaseAudioContextCreateBuffer(audioContext) {
+      try {
+        if (audioContext.createBuffer(SILENT_WAV, true)) {
+          return { "mixToMono": true };
+        }
+      } catch (e) {}
+    }
+
+    function checkBaseAudioContextDecodeAudioData(audioContex) {
+      if (audioContext.decodeAudioData(SILENT_WAV, function() {}, function() {})) {
         return { "promise": true };
       }
     }
@@ -167,8 +175,10 @@
     }
 
     var specCheckList = {
+      "/BaseAudioContext/createBuffer": checkBaseAudioContextCreateBuffer,
       "/BaseAudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
 
+      "/AudioContext/createBuffer": checkBaseAudioContextCreateBuffer,
       "/AudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
       "/AudioContext/startRendering": { "void": true },
 
