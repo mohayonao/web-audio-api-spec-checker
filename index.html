@@ -10,6 +10,14 @@
   window.addEventListener("DOMContentLoaded", function() {
     "use strict";
 
+    function assign(obj1, obj2) {
+      if (obj2) {
+        Object.keys(obj2).forEach(function(key) {
+          obj1[key] = obj2[key];
+        });
+      }
+    }
+
     function puts(line) {
       document.getElementById("puts").innerText += line + "\n";
     }
@@ -248,9 +256,9 @@
           var data = {};
 
           if (typeof specCheckList[apiPath] === "function") {
-            Object.assign(data, specCheckList[apiPath](audioContext));
+            assign(data, specCheckList[apiPath](audioContext));
           } else if (typeof specCheckList[apiPath] === "object") {
-            Object.assign(data, specCheckList[apiPath]);
+            assign(data, specCheckList[apiPath]);
           }
 
           puts('  "' + apiPath + '": ' + stringify(data) + ',');
