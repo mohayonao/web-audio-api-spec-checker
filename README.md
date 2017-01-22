@@ -21,6 +21,8 @@ https://mohayonao.github.io/web-audio-api-spec-checker/
 
 ### Apple Safari
 - [safari 10](specs/safari-10.json)
+- [safari 9](specs/safari-9.json)
+- [safari 7](specs/safari-7.json)
 
 ### MS Edge
 - [edge 38](specs/edge-38.json)
