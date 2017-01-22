@@ -45,8 +45,10 @@
     var env = {};
 
     Object.getOwnPropertyNames(window).forEach(function(name) {
-      if (/^[A-Z][a-zA-Z]+$/.test(name) && typeof window[name] === "function") {
-        env[name] = window[name];
+      if (/^[A-Z][a-zA-Z]+$/.test(name)) {
+        if (typeof window[name] === "function" || /^\[object \w+Constructor\]$/.test(String(window[name]))) {
+          env[name] = window[name];
+        }
       }
     });
 
@@ -94,23 +96,26 @@
     var constructorList = {
       "createBuffer": { className: "AudioBuffer", args: [ 1, 128, 44100 ] },
       "createBufferSource": { className: "AudioBufferSourceNode", args: [] },
+      "createScriptProcessor": { className: "ScriptProcessorNode", args: [ 1024, 1, 1 ] },
+      "createJavaScriptNode": { className: "ScriptProcessorNode", args: [ 1024, 1, 1 ] },
+      "createAnalyser": { className: "AnalyserNode", args: [] },
       "createGain": { className: "GainNode", args: [] },
+      "createGainNode": { className: "GainNode", args: [] },
       "createDelay": { className: "DelayNode", args: [] },
+      "createDelayNode": { className: "DelayNode", args: [] },
       "createBiquadFilter": { className: "BiquadFilterNode", args: [] },
-      "createIIRFilter": { className: "IIRFilterNode", args: [ new Float32Array([1,1], new Float32Array([1,1])) ] },
+      "createIIRFilter": { className: "IIRFilterNode", args: [ new Float32Array([1,1]), new Float32Array([1,1]) ] },
       "createWaveShaper": { className: "WaveShaperNode", args: [] },
       "createPanner": { className: "PannerNode", args: [] },
-      "createConvolver": { className: "ConvolverNode", args: [] },
-      "createDynamicsCompressor": { className: "DynamicsCompressorNode", args: [] },
-      "createAnalyser": { className: "AnalyserNode", args: [] },
-      "createScriptProcessor": { className: "ScriptProcessorNode", args: [ 1024, 1, 1 ] },
+      "createSpatialPanner": { className: "SpatialPannerNode", args: [] },
       "createStereoPanner": { className: "StereoPannerNode", args: [] },
-      "createOscillator": { className: "OscillatorNode", args: [] },
-      "createPeriodicWave": { className: "PeriodicWave", args: [ new Float32Array(4), new Float32Array(4) ] },
+      "createConvolver": { className: "ConvolverNode", args: [] },
       "createChannelSplitter": { className: "ChannelSplitterNode", args: [] },
       "createChannelMerger": { className: "ChannelMergerNode", args: [] },
-      "createSpatialPanner": { className: "SpatialPannerNode", args: [] },
-      "createJavaScriptNode": { className: "JavaScriptNode", args: [ 1024, 1, 1 ] },
+      "createDynamicsCompressor": { className: "DynamicsCompressorNode", args: [] },
+      "createOscillator": { className: "OscillatorNode", args: [] },
+      "createPeriodicWave": { className: "PeriodicWave", args: [ new Float32Array(4), new Float32Array(4) ] },
+      "createWaveTable": { className: "PeriodicWave", args: [ new Float32Array(4), new Float32Array(4) ] },
       "createMediaElementSource": { className: "MediaElementAudioSourceNode", args: [ new Audio() ] },
       "createMediaStreamDestination": { className: "MediaStreamAudioDestinationNode", args: [] },
     };
@@ -188,7 +193,6 @@
 
       "/AudioContext/createBuffer": checkBaseAudioContextCreateBuffer,
       "/AudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
-      "/AudioContext/startRendering": { "void": true },
 
       "/AudioNode/connect": checkAudioNodeConnect,
       "/AudioNode/disconnect": checkAudioNodeDisconnect,
@@ -197,7 +201,6 @@
       "/AudioParam/exponentialRampToValueAtTime": checkAudioParam("exponentialRampToValueAtTime", [ 0.1, 0 ]),
       "/AudioParam/linearRampToValueAtTime": checkAudioParam("linearRampToValueAtTime", [ 0, 0 ]),
       "/AudioParam/setTargetAtTime": checkAudioParam("setTargetAtTime", [ 0, 0, 0.1 ]),
-      "/AudioParam/setTargetValueAtTime": { "void": true },
       "/AudioParam/setValueAtTime": checkAudioParam("setValueAtTime", [ 0, 0 ]),
       "/AudioParam/setValueCurveAtTime": checkAudioParam("setValueCurveAtTime", [ new Float32Array(8), 0, 1 ]),
 
@@ -209,17 +212,30 @@
     Object.keys(constructorList).forEach(function(methodName) {
       var className = constructorList[methodName].className;
       var args = constructorList[methodName].args;
-      if (!env[className] && audioContext[methodName]) {
+      if (audioContext[methodName]) {
         try {
           var node = audioContext[methodName].apply(audioContext, args);
           var klass = node.constructor;
 
-          env[klass.name || className] = klass;
+          klass["$instance"] = node;
+
+          env[className] = klass;
         } catch (e) {
           console.error(methodName, e);
         }
       }
     });
+
+    if (env["AudioContext"]) {
+      env["AudioContext"]["$instance"] = audioContext;
+    }
+
+    if (env["AudioListener"]) {
+      env["AudioListener"]["$instance"] = audioContext.listener;
+    }
+    if (env["AudioDestinationNode"]) {
+      env["AudioDestinationNode"]["$instance"] = audioContext.destination;
+    }
 
     puts('// ' + window.navigator.userAgent);
     puts('');
@@ -234,7 +250,7 @@
         try {
           new env[className]();
         } catch (e) {
-          if (/illegal constructor/i.test(e.message)) {
+          if (/illegal constructor/i.test(e.message) || /is not a constructor/i.test(e.message)) {
             data["protected"] = true;
           }
         }
@@ -248,7 +264,13 @@
 
         puts('  "/' + className + '": ' + stringify(data) + ',');
 
-        Object.getOwnPropertyNames(env[className].prototype).sort().forEach(function(methodName) {
+        var methods = Object.getOwnPropertyNames(env[className].prototype);
+
+        if (env[className]["$instance"]) {
+          methods.push.apply(methods, Object.keys(env[className]["$instance"]));
+        }
+
+        methods.sort().forEach(function(methodName) {
           if (methodName === "constructor") {
             return;
           }
@@ -264,6 +286,8 @@
           puts('  "' + apiPath + '": ' + stringify(data) + ',');
         });
         puts('');
+      } else {
+        console.log(className + " not defined")
       }
     });
 
