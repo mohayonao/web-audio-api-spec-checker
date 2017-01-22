@@ -76,7 +76,7 @@
   "/AudioBuffer/duration": {},
   "/AudioBuffer/gain": {},
   "/AudioBuffer/getChannelData": {},
-  "/AudioBuffer/length": {},
+  "/AudioBuffer/length": { "keys": true },
   "/AudioBuffer/numberOfChannels": {},
   "/AudioBuffer/sampleRate": {},
 
@@ -85,7 +85,7 @@
   "/AudioBufferSourceNode/PLAYING_STATE": {},
   "/AudioBufferSourceNode/SCHEDULED_STATE": {},
   "/AudioBufferSourceNode/UNSCHEDULED_STATE": {},
-  "/AudioBufferSourceNode/buffer": {},
+  "/AudioBufferSourceNode/buffer": { "keys": true },
   "/AudioBufferSourceNode/gain": {},
   "/AudioBufferSourceNode/loop": {},
   "/AudioBufferSourceNode/loopEnd": {},
@@ -107,7 +107,7 @@
   "/ScriptProcessorNode/bufferSize": {},
   "/ScriptProcessorNode/onaudioprocess": {},
 
-  "/PannerNode": { "global": false, "protected": true },
+  "/PannerNode": { "global": "webkitAudioPannerNode", "protected": true },
   "/PannerNode/EQUALPOWER": {},
   "/PannerNode/EXPONENTIAL_DISTANCE": {},
   "/PannerNode/HRTF": {},
@@ -117,9 +117,9 @@
   "/PannerNode/coneInnerAngle": {},
   "/PannerNode/coneOuterAngle": {},
   "/PannerNode/coneOuterGain": {},
-  "/PannerNode/distanceModel": {},
+  "/PannerNode/distanceModel": { "keys": true },
   "/PannerNode/maxDistance": {},
-  "/PannerNode/panningModel": {},
+  "/PannerNode/panningModel": { "keys": true },
   "/PannerNode/refDistance": {},
   "/PannerNode/rolloffFactor": {},
   "/PannerNode/setOrientation": {},
@@ -127,9 +127,11 @@
   "/PannerNode/setVelocity": {},
 
   "/AudioListener": { "global": "AudioListener", "protected": true },
+  "/AudioListener/dopplerFactor": { "keys": true },
   "/AudioListener/setOrientation": {},
   "/AudioListener/setPosition": {},
   "/AudioListener/setVelocity": {},
+  "/AudioListener/speedOfSound": { "keys": true },
 
   "/ConvolverNode": { "global": "ConvolverNode", "protected": true },
   "/ConvolverNode/buffer": {},
@@ -171,7 +173,7 @@
   "/BiquadFilterNode/frequency": {},
   "/BiquadFilterNode/gain": {},
   "/BiquadFilterNode/getFrequencyResponse": {},
-  "/BiquadFilterNode/type": {},
+  "/BiquadFilterNode/type": { "keys": true },
 
   "/WaveShaperNode": { "global": "WaveShaperNode", "protected": true },
   "/WaveShaperNode/curve": {},
@@ -196,7 +198,7 @@
   "/OscillatorNode/setPeriodicWave": {},
   "/OscillatorNode/start": {},
   "/OscillatorNode/stop": {},
-  "/OscillatorNode/type": {},
+  "/OscillatorNode/type": { "keys": true },
 
   "/PeriodicWave": { "global": "PeriodicWave", "protected": true }
 }
