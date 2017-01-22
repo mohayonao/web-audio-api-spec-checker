@@ -42,6 +42,18 @@
       }
     }
 
+    function findGlobal(className, classConstructor) {
+      var result = false;
+
+      Object.getOwnPropertyNames(window).forEach(function(name) {
+        if (window[name] === classConstructor) {
+          result = name;
+        }
+      });
+
+      return result;
+    }
+
     var env = {};
 
     Object.getOwnPropertyNames(window).forEach(function(name) {
@@ -245,7 +257,7 @@
       if (env[className]) {
         var data = {};
 
-        data["global"] = window[className] ? className : window["webkit" + className] ? "webkit" + className : false;
+        data["global"] = findGlobal(className, env[className]);
 
         try {
           new env[className]();
@@ -265,9 +277,11 @@
         puts('  "/' + className + '": ' + stringify(data) + ',');
 
         var methods = Object.getOwnPropertyNames(env[className].prototype);
+        var ownkeys = [];
 
         if (env[className]["$instance"]) {
-          methods.push.apply(methods, Object.keys(env[className]["$instance"]));
+          ownkeys = Object.keys(env[className]["$instance"]);
+          methods.push.apply(methods, ownkeys);
         }
 
         methods.sort().forEach(function(methodName) {
@@ -283,6 +297,10 @@
             assign(data, specCheckList[apiPath]);
           }
 
+          if (ownkeys.indexOf(methodName) !== -1) {
+            data["keys"] = true;
+          }
+
           puts('  "' + apiPath + '": ' + stringify(data) + ',');
         });
         puts('');
@@ -293,6 +311,10 @@
 
     puts('}');
   });
+
+  setTimeout(function() {
+    window.waaspec = document.getElementById("puts").innerText;
+  }, 0);
   </script>
 </body>
 </html>
