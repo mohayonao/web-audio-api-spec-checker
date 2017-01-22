@@ -1,5 +1,5 @@
 {
-  "/BaseAudioContext": { "global": false },
+  "/BaseAudioContext": { "global": false, "protected": true },
   "/BaseAudioContext/createAnalyser": {},
   "/BaseAudioContext/createBiquadFilter": {},
   "/BaseAudioContext/createBuffer": {},
@@ -21,7 +21,7 @@
   "/BaseAudioContext/createStereoPanner": {},
   "/BaseAudioContext/createWaveShaper": {},
   "/BaseAudioContext/currentTime": {},
-  "/BaseAudioContext/decodeAudioData": {},
+  "/BaseAudioContext/decodeAudioData": { "promise": true },
   "/BaseAudioContext/destination": {},
   "/BaseAudioContext/listener": {},
   "/BaseAudioContext/onstatechange": {},
@@ -40,31 +40,31 @@
   "/OfflineAudioContext/startRendering": {},
   "/OfflineAudioContext/suspend": {},
 
-  "/AudioNode": { "global": "AudioNode" },
+  "/AudioNode": { "global": "AudioNode", "protected": true },
   "/AudioNode/channelCount": {},
   "/AudioNode/channelCountMode": {},
   "/AudioNode/channelInterpretation": {},
-  "/AudioNode/connect": {},
+  "/AudioNode/connect": { "chain": true },
   "/AudioNode/context": {},
-  "/AudioNode/disconnect": {},
+  "/AudioNode/disconnect": { "selective": true },
   "/AudioNode/numberOfInputs": {},
   "/AudioNode/numberOfOutputs": {},
 
-  "/AudioSourceNode": { "global": false },
+  "/AudioSourceNode": { "global": false, "protected": true },
 
-  "/AudioDestinationNode": { "global": "AudioDestinationNode" },
+  "/AudioDestinationNode": { "global": "AudioDestinationNode", "protected": true },
   "/AudioDestinationNode/maxChannelCount": {},
 
-  "/AudioParam": { "global": "AudioParam" },
-  "/AudioParam/cancelScheduledValues": {},
+  "/AudioParam": { "global": "AudioParam", "protected": true },
+  "/AudioParam/cancelScheduledValues": { "chain": true },
   "/AudioParam/defaultValue": {},
-  "/AudioParam/exponentialRampToValueAtTime": {},
-  "/AudioParam/linearRampToValueAtTime": {},
+  "/AudioParam/exponentialRampToValueAtTime": { "chain": true },
+  "/AudioParam/linearRampToValueAtTime": { "chain": true },
   "/AudioParam/maxValue": {},
   "/AudioParam/minValue": {},
-  "/AudioParam/setTargetAtTime": {},
-  "/AudioParam/setValueAtTime": {},
-  "/AudioParam/setValueCurveAtTime": {},
+  "/AudioParam/setTargetAtTime": { "chain": true },
+  "/AudioParam/setValueAtTime": { "chain": true },
+  "/AudioParam/setValueCurveAtTime": { "chain": true },
   "/AudioParam/value": {},
 
   "/GainNode": { "global": "GainNode" },
@@ -73,7 +73,7 @@
   "/DelayNode": { "global": "DelayNode" },
   "/DelayNode/delayTime": {},
 
-  "/AudioBuffer": { "global": "AudioBuffer" },
+  "/AudioBuffer": { "global": "AudioBuffer", "context": true },
   "/AudioBuffer/copyFromChannel": {},
   "/AudioBuffer/copyToChannel": {},
   "/AudioBuffer/duration": {},
@@ -96,7 +96,7 @@
   "/MediaElementAudioSourceNode": { "global": "MediaElementAudioSourceNode" },
   "/MediaElementAudioSourceNode/mediaElement": {},
 
-  "/ScriptProcessorNode": { "global": "ScriptProcessorNode" },
+  "/ScriptProcessorNode": { "global": "ScriptProcessorNode", "protected": true },
   "/ScriptProcessorNode/bufferSize": {},
   "/ScriptProcessorNode/onaudioprocess": {},
 
@@ -119,7 +119,7 @@
   "/PannerNode/setPosition": {},
   "/PannerNode/setVelocity": {},
 
-  "/AudioListener": { "global": "AudioListener" },
+  "/AudioListener": { "global": "AudioListener", "protected": true },
   "/AudioListener/dopplerFactor": {},
   "/AudioListener/forwardX": {},
   "/AudioListener/forwardY": {},
@@ -161,16 +161,16 @@
   "/DynamicsCompressorNode/attack": {},
   "/DynamicsCompressorNode/knee": {},
   "/DynamicsCompressorNode/ratio": {},
-  "/DynamicsCompressorNode/reduction": {},
+  "/DynamicsCompressorNode/reduction": { "number": true },
   "/DynamicsCompressorNode/release": {},
   "/DynamicsCompressorNode/threshold": {},
 
   "/BiquadFilterNode": { "global": "BiquadFilterNode" },
+  "/BiquadFilterNode/Q": {},
   "/BiquadFilterNode/detune": {},
   "/BiquadFilterNode/frequency": {},
   "/BiquadFilterNode/gain": {},
   "/BiquadFilterNode/getFrequencyResponse": {},
-  "/BiquadFilterNode/Q": {},
   "/BiquadFilterNode/type": {},
 
   "/IIRFilterNode": { "global": "IIRFilterNode" },
@@ -194,6 +194,6 @@
   "/MediaStreamAudioSourceNode": { "global": "MediaStreamAudioSourceNode" },
   "/MediaStreamAudioSourceNode/mediaStream": {},
 
-  "/MediaStreamAudioDestinationNode": { "global": "MediaStreamAudioDestinationNode" },
+  "/MediaStreamAudioDestinationNode": { "global": "MediaStreamAudioDestinationNode", "protected": true },
   "/MediaStreamAudioDestinationNode/stream": {}
 }
