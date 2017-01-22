@@ -29,13 +29,13 @@
   "/AudioContext/onstatechange": {},
   "/AudioContext/resume": {},
   "/AudioContext/sampleRate": {},
-  "/AudioContext/startRendering": { "void": true },
+  "/AudioContext/startRendering": {},
   "/AudioContext/state": {},
   "/AudioContext/suspend": {},
 
   "/OfflineAudioContext": { "global": "webkitOfflineAudioContext" },
 
-  "/AudioNode": { "global": "AudioNode" },
+  "/AudioNode": { "global": "AudioNode", "protected": true },
   "/AudioNode/channelCount": {},
   "/AudioNode/channelCountMode": {},
   "/AudioNode/channelInterpretation": {},
@@ -45,10 +45,10 @@
   "/AudioNode/numberOfInputs": {},
   "/AudioNode/numberOfOutputs": {},
 
-  "/AudioDestinationNode": { "global": "AudioDestinationNode" },
+  "/AudioDestinationNode": { "global": "AudioDestinationNode", "protected": true },
   "/AudioDestinationNode/maxChannelCount": {},
 
-  "/AudioParam": { "global": "AudioParam" },
+  "/AudioParam": { "global": "AudioParam", "protected": true },
   "/AudioParam/cancelScheduledValues": {},
   "/AudioParam/defaultValue": {},
   "/AudioParam/exponentialRampToValueAtTime": {},
@@ -57,19 +57,19 @@
   "/AudioParam/minValue": {},
   "/AudioParam/name": {},
   "/AudioParam/setTargetAtTime": {},
-  "/AudioParam/setTargetValueAtTime": { "void": true },
+  "/AudioParam/setTargetValueAtTime": {},
   "/AudioParam/setValueAtTime": {},
   "/AudioParam/setValueCurveAtTime": {},
   "/AudioParam/units": {},
   "/AudioParam/value": {},
 
-  "/GainNode": { "global": "GainNode" },
+  "/GainNode": { "global": "GainNode", "protected": true },
   "/GainNode/gain": {},
 
-  "/DelayNode": { "global": "DelayNode" },
+  "/DelayNode": { "global": "DelayNode", "protected": true },
   "/DelayNode/delayTime": {},
 
-  "/AudioBuffer": { "global": "AudioBuffer" },
+  "/AudioBuffer": { "global": "AudioBuffer", "protected": true },
   "/AudioBuffer/duration": {},
   "/AudioBuffer/gain": {},
   "/AudioBuffer/getChannelData": {},
@@ -77,7 +77,7 @@
   "/AudioBuffer/numberOfChannels": {},
   "/AudioBuffer/sampleRate": {},
 
-  "/AudioBufferSourceNode": { "global": "AudioBufferSourceNode" },
+  "/AudioBufferSourceNode": { "global": "AudioBufferSourceNode", "protected": true },
   "/AudioBufferSourceNode/FINISHED_STATE": {},
   "/AudioBufferSourceNode/PLAYING_STATE": {},
   "/AudioBufferSourceNode/SCHEDULED_STATE": {},
@@ -97,25 +97,44 @@
   "/AudioBufferSourceNode/start": {},
   "/AudioBufferSourceNode/stop": {},
 
-  "/MediaElementAudioSourceNode": { "global": "MediaElementAudioSourceNode" },
+  "/MediaElementAudioSourceNode": { "global": "MediaElementAudioSourceNode", "protected": true },
   "/MediaElementAudioSourceNode/mediaElement": {},
 
-  "/ScriptProcessorNode": { "global": "ScriptProcessorNode" },
+  "/ScriptProcessorNode": { "global": "ScriptProcessorNode", "protected": true },
   "/ScriptProcessorNode/bufferSize": {},
   "/ScriptProcessorNode/onaudioprocess": {},
 
-  "/AudioListener": { "global": "AudioListener" },
+  "/PannerNode": { "global": false, "protected": true },
+  "/PannerNode/EQUALPOWER": {},
+  "/PannerNode/EXPONENTIAL_DISTANCE": {},
+  "/PannerNode/HRTF": {},
+  "/PannerNode/INVERSE_DISTANCE": {},
+  "/PannerNode/LINEAR_DISTANCE": {},
+  "/PannerNode/SOUNDFIELD": {},
+  "/PannerNode/coneInnerAngle": {},
+  "/PannerNode/coneOuterAngle": {},
+  "/PannerNode/coneOuterGain": {},
+  "/PannerNode/distanceModel": {},
+  "/PannerNode/maxDistance": {},
+  "/PannerNode/panningModel": {},
+  "/PannerNode/refDistance": {},
+  "/PannerNode/rolloffFactor": {},
+  "/PannerNode/setOrientation": {},
+  "/PannerNode/setPosition": {},
+  "/PannerNode/setVelocity": {},
+
+  "/AudioListener": { "global": "AudioListener", "protected": true },
   "/AudioListener/dopplerFactor": {},
   "/AudioListener/setOrientation": {},
   "/AudioListener/setPosition": {},
   "/AudioListener/setVelocity": {},
   "/AudioListener/speedOfSound": {},
 
-  "/ConvolverNode": { "global": "ConvolverNode" },
+  "/ConvolverNode": { "global": "ConvolverNode", "protected": true },
   "/ConvolverNode/buffer": {},
   "/ConvolverNode/normalize": {},
 
-  "/AnalyserNode": { "global": "AnalyserNode" },
+  "/AnalyserNode": { "global": "AnalyserNode", "protected": true },
   "/AnalyserNode/fftSize": {},
   "/AnalyserNode/frequencyBinCount": {},
   "/AnalyserNode/getByteFrequencyData": {},
@@ -125,11 +144,11 @@
   "/AnalyserNode/minDecibels": {},
   "/AnalyserNode/smoothingTimeConstant": {},
 
-  "/ChannelSplitterNode": { "global": "ChannelSplitterNode" },
+  "/ChannelSplitterNode": { "global": "ChannelSplitterNode", "protected": true },
 
-  "/ChannelMergerNode": { "global": "ChannelMergerNode" },
+  "/ChannelMergerNode": { "global": "ChannelMergerNode", "protected": true },
 
-  "/DynamicsCompressorNode": { "global": "DynamicsCompressorNode" },
+  "/DynamicsCompressorNode": { "global": "DynamicsCompressorNode", "protected": true },
   "/DynamicsCompressorNode/attack": {},
   "/DynamicsCompressorNode/knee": {},
   "/DynamicsCompressorNode/ratio": {},
@@ -137,7 +156,7 @@
   "/DynamicsCompressorNode/release": {},
   "/DynamicsCompressorNode/threshold": {},
 
-  "/BiquadFilterNode": { "global": "BiquadFilterNode" },
+  "/BiquadFilterNode": { "global": "BiquadFilterNode", "protected": true },
   "/BiquadFilterNode/ALLPASS": {},
   "/BiquadFilterNode/BANDPASS": {},
   "/BiquadFilterNode/HIGHPASS": {},
@@ -153,11 +172,11 @@
   "/BiquadFilterNode/getFrequencyResponse": {},
   "/BiquadFilterNode/type": {},
 
-  "/WaveShaperNode": { "global": "WaveShaperNode" },
+  "/WaveShaperNode": { "global": "WaveShaperNode", "protected": true },
   "/WaveShaperNode/curve": {},
   "/WaveShaperNode/oversample": {},
 
-  "/OscillatorNode": { "global": "OscillatorNode" },
+  "/OscillatorNode": { "global": "OscillatorNode", "protected": true },
   "/OscillatorNode/CUSTOM": {},
   "/OscillatorNode/FINISHED_STATE": {},
   "/OscillatorNode/PLAYING_STATE": {},
@@ -178,5 +197,5 @@
   "/OscillatorNode/stop": {},
   "/OscillatorNode/type": {},
 
-  "/PeriodicWave": { "global": "PeriodicWave" }
+  "/PeriodicWave": { "global": "PeriodicWave", "protected": true }
 }
