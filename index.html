@@ -147,7 +147,7 @@
       } catch (e) {}
     }
 
-    function checkBaseAudioContextDecodeAudioData(audioContex) {
+    function checkBaseAudioContextDecodeAudioData(audioContext) {
       if (audioContext.decodeAudioData(SILENT_WAV, function() {}, function() {})) {
         return { "promise": true };
       }
@@ -270,7 +270,7 @@
         if (className === "AudioBuffer") {
           try {
             new AudioBuffer(audioContext, { numberOfChannels: 1, length: 128, sampleRate: 44100 });
-            data["context"] = true;
+            data["requireContext"] = true;
           } catch (e) {}
         }
 
