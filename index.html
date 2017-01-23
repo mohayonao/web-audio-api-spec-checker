@@ -153,6 +153,14 @@
       }
     }
 
+    function checkOfflineAudioContextStartRendering() {
+      var audioContext = new env["OfflineAudioContext"](1, 128, 44100);
+
+      if (audioContext.startRendering()) {
+        return { "promise": true };
+      }
+    }
+
     function checkAudioNodeConnect(audioContext) {
       var gain = audioContext.createGain();
       var data = {};
@@ -205,6 +213,8 @@
 
       "/AudioContext/createBuffer": checkBaseAudioContextCreateBuffer,
       "/AudioContext/decodeAudioData": checkBaseAudioContextDecodeAudioData,
+
+      "/OfflineAudioContext/startRendering": checkOfflineAudioContextStartRendering,
 
       "/AudioNode/connect": checkAudioNodeConnect,
       "/AudioNode/disconnect": checkAudioNodeDisconnect,
