@@ -73,7 +73,7 @@
   "/DelayNode": { "global": "DelayNode" },
   "/DelayNode/delayTime": {},
 
-  "/AudioBuffer": { "global": "AudioBuffer", "context": true },
+  "/AudioBuffer": { "global": "AudioBuffer", "requireContext": true },
   "/AudioBuffer/copyFromChannel": {},
   "/AudioBuffer/copyToChannel": {},
   "/AudioBuffer/duration": {},
