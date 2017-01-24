@@ -10,6 +10,8 @@
   window.addEventListener("DOMContentLoaded", function() {
     "use strict";
 
+    var $puts = document.getElementById("puts");
+
     function assign(obj1, obj2) {
       if (obj2) {
         Object.keys(obj2).forEach(function(key) {
@@ -19,7 +21,11 @@
     }
 
     function puts(line) {
-      document.getElementById("puts").innerText += line + "\n";
+      if (typeof $puts.textContent === "string") {
+        $puts.textContent += line + "\r\n";
+      } else {
+        $puts.innerText += line + "\r\n";
+      }
     }
 
     function stringify(object) {
@@ -53,6 +59,9 @@
 
       return result;
     }
+
+    puts('// ' + window.navigator.userAgent);
+    puts('');
 
     var env = {};
 
@@ -220,6 +229,7 @@
       "/AudioNode/disconnect": checkAudioNodeDisconnect,
 
       "/AudioParam/cancelScheduledValues": checkAudioParam("cancelScheduledValues", [ 0 ]),
+      "/AudioParam/cancelValuesAndHoldAtTime": checkAudioParam("cancelScheduledValues", [ 0 ]),
       "/AudioParam/exponentialRampToValueAtTime": checkAudioParam("exponentialRampToValueAtTime", [ 0.1, 0 ]),
       "/AudioParam/linearRampToValueAtTime": checkAudioParam("linearRampToValueAtTime", [ 0, 0 ]),
       "/AudioParam/setTargetAtTime": checkAudioParam("setTargetAtTime", [ 0, 0, 0.1 ]),
@@ -229,102 +239,105 @@
       "/DynamicsCompressorNode/reduction": checkDynamicsCompressorNodeReduction,
     };
 
-    var audioContext = new env["AudioContext"]();
-
-    Object.keys(constructorList).forEach(function(methodName) {
-      var className = constructorList[methodName].className;
-      var args = constructorList[methodName].args;
-      if (audioContext[methodName]) {
-        try {
-          var node = audioContext[methodName].apply(audioContext, args);
-          var klass = node.constructor;
-
-          klass["$instance"] = node;
-
-          env[className] = klass;
-        } catch (e) {
-          console.error(methodName, e);
-        }
-      }
-    });
-
-    if (env["AudioContext"]) {
-      env["AudioContext"]["$instance"] = audioContext;
-    }
-
-    if (env["AudioListener"]) {
-      env["AudioListener"]["$instance"] = audioContext.listener;
-    }
-    if (env["AudioDestinationNode"]) {
-      env["AudioDestinationNode"]["$instance"] = audioContext.destination;
-    }
-
-    puts('// ' + window.navigator.userAgent);
-    puts('');
     puts('{');
 
-    classList.forEach(function(className) {
-      if (env[className]) {
-        var data = {};
+    if (env["AudioContext"]) {
+      var audioContext = new env["AudioContext"]();
 
-        data["global"] = findGlobal(className, env[className]);
-
-        try {
-          new env[className]();
-        } catch (e) {
-          if (/illegal constructor/i.test(e.message) || /is not a constructor/i.test(e.message)) {
-            data["protected"] = true;
-          }
-        }
-
-        if (className === "AudioBuffer") {
+      Object.keys(constructorList).forEach(function(methodName) {
+        var className = constructorList[methodName].className;
+        var args = constructorList[methodName].args;
+        if (audioContext[methodName]) {
           try {
-            new AudioBuffer(audioContext, { numberOfChannels: 1, length: 128, sampleRate: 44100 });
-            data["requireContext"] = true;
-          } catch (e) {}
-        }
+            var node = audioContext[methodName].apply(audioContext, args);
+            var klass = node.constructor;
 
-        puts('  "/' + className + '": ' + stringify(data) + ',');
+            klass["$instance"] = node;
 
-        var methods = Object.getOwnPropertyNames(env[className].prototype);
-        var ownkeys = [];
-
-        if (env[className]["$instance"]) {
-          ownkeys = Object.keys(env[className]["$instance"]);
-          methods.push.apply(methods, ownkeys);
-        }
-
-        methods.sort().forEach(function(methodName) {
-          if (methodName === "constructor") {
-            return;
+            env[className] = klass;
+          } catch (e) {
+            console.error(methodName, e);
           }
-          var apiPath = "/" + className + "/" + methodName;
+        }
+      });
+
+      if (env["AudioContext"]) {
+        env["AudioContext"]["$instance"] = audioContext;
+      }
+
+      if (env["AudioListener"]) {
+        env["AudioListener"]["$instance"] = audioContext.listener;
+      }
+      if (env["AudioDestinationNode"]) {
+        env["AudioDestinationNode"]["$instance"] = audioContext.destination;
+      }
+
+      classList.forEach(function(className) {
+        if (env[className]) {
           var data = {};
 
-          if (typeof specCheckList[apiPath] === "function") {
-            assign(data, specCheckList[apiPath](audioContext));
-          } else if (typeof specCheckList[apiPath] === "object") {
-            assign(data, specCheckList[apiPath]);
+          data["global"] = findGlobal(className, env[className]);
+
+          try {
+            new env[className]();
+          } catch (e) {
+            if (/illegal constructor/i.test(e.message) || /is not a constructor/i.test(e.message)) {
+              data["protected"] = true;
+            }
           }
 
-          if (ownkeys.indexOf(methodName) !== -1) {
-            data["keys"] = true;
+          if (className === "AudioBuffer") {
+            try {
+              new AudioBuffer(audioContext, { numberOfChannels: 1, length: 128, sampleRate: 44100 });
+              data["requireContext"] = true;
+            } catch (e) {}
           }
 
-          puts('  "' + apiPath + '": ' + stringify(data) + ',');
-        });
-        puts('');
-      } else {
-        console.log(className + " not defined")
-      }
-    });
+          puts('  "/' + className + '": ' + stringify(data) + ',');
+
+          var methods = Object.getOwnPropertyNames(env[className].prototype);
+          var ownkeys = [];
+
+          if (env[className]["$instance"]) {
+            ownkeys = Object.keys(env[className]["$instance"]);
+            methods.push.apply(methods, ownkeys);
+          }
+
+          methods.sort().forEach(function(methodName) {
+            if (methodName === "constructor") {
+              return;
+            }
+            var apiPath = "/" + className + "/" + methodName;
+            var data = {};
+
+            if (typeof specCheckList[apiPath] === "function") {
+              assign(data, specCheckList[apiPath](audioContext));
+            } else if (typeof specCheckList[apiPath] === "object") {
+              assign(data, specCheckList[apiPath]);
+            }
+
+            if (ownkeys.indexOf(methodName) !== -1) {
+              data["keys"] = true;
+            }
+
+            puts('  "' + apiPath + '": ' + stringify(data) + ',');
+          });
+          puts('');
+        } else {
+          console.log(className + " not defined")
+        }
+      });
+    }
 
     puts('}');
-  });
 
-  setTimeout(function() {
-    window.waaspec = document.getElementById("puts").innerText;
-  }, 0);
+
+    if (typeof $puts.textContent === "string") {
+      window.waaspec = $puts.textContent;
+    } else {
+      window.waaspec = $puts.innerText;
+    }
+  });
   </script>
 </body>
 </html>
