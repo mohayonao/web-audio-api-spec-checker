@@ -281,7 +281,16 @@
           try {
             new env[className]();
           } catch (e) {
-            if (/illegal constructor/i.test(e.message) || /is not a constructor/i.test(e.message)) {
+            // Chrome, Firefox
+            if (/illegal constructor/i.test(e.message)) {
+              data["protected"] = true;
+            }
+            // Safari
+            if (/is not a constructor/i.test(e.message)) {
+              data["protected"] = true;
+            }
+            // Edge
+            if (/function expected/i.test(e.message)) {
               data["protected"] = true;
             }
           }
