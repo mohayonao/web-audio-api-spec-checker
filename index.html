@@ -11,6 +11,7 @@
     "use strict";
 
     var $puts = document.getElementById("puts");
+    var newline = /edge/i.test(window.navigator.userAgent) ? "\r\n" : "\n";
 
     function assign(obj1, obj2) {
       if (obj2) {
@@ -22,9 +23,9 @@
 
     function puts(line) {
       if (typeof $puts.textContent === "string") {
-        $puts.textContent += line + "\r\n";
+        $puts.textContent += line + newline;
       } else {
-        $puts.innerText += line + "\r\n";
+        $puts.innerText += line + newline;
       }
     }
 
