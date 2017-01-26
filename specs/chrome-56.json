@@ -1,11 +1,12 @@
 {
-  "/BaseAudioContext": { "global": false, "protected": true },
+  "/BaseAudioContext": { "global": "BaseAudioContext", "protected": true },
   "/BaseAudioContext/createAnalyser": {},
   "/BaseAudioContext/createBiquadFilter": {},
   "/BaseAudioContext/createBuffer": {},
   "/BaseAudioContext/createBufferSource": {},
   "/BaseAudioContext/createChannelMerger": {},
   "/BaseAudioContext/createChannelSplitter": {},
+  "/BaseAudioContext/createConstantSource": {},
   "/BaseAudioContext/createConvolver": {},
   "/BaseAudioContext/createDelay": {},
   "/BaseAudioContext/createDynamicsCompressor": {},
@@ -28,15 +29,14 @@
   "/BaseAudioContext/resume": {},
   "/BaseAudioContext/sampleRate": {},
   "/BaseAudioContext/state": {},
-  "/BaseAudioContext/suspend": {},
 
   "/AudioContext": { "global": "AudioContext" },
   "/AudioContext/close": {},
+  "/AudioContext/suspend": {},
 
   "/OfflineAudioContext": { "global": "OfflineAudioContext" },
   "/OfflineAudioContext/length": {},
   "/OfflineAudioContext/oncomplete": {},
-  "/OfflineAudioContext/resume": {},
   "/OfflineAudioContext/startRendering": { "promise": true },
   "/OfflineAudioContext/suspend": {},
 
@@ -93,6 +93,12 @@
   "/AudioBufferSourceNode/start": {},
   "/AudioBufferSourceNode/stop": {},
 
+  "/ConstantSourceNode": { "global": "ConstantSourceNode" },
+  "/ConstantSourceNode/offset": {},
+  "/ConstantSourceNode/onended": {},
+  "/ConstantSourceNode/start": {},
+  "/ConstantSourceNode/stop": {},
+
   "/MediaElementAudioSourceNode": { "global": "MediaElementAudioSourceNode" },
   "/MediaElementAudioSourceNode/mediaElement": {},
 
@@ -117,10 +123,8 @@
   "/PannerNode/rolloffFactor": {},
   "/PannerNode/setOrientation": {},
   "/PannerNode/setPosition": {},
-  "/PannerNode/setVelocity": {},
 
   "/AudioListener": { "global": "AudioListener", "protected": true },
-  "/AudioListener/dopplerFactor": {},
   "/AudioListener/forwardX": {},
   "/AudioListener/forwardY": {},
   "/AudioListener/forwardZ": {},
@@ -129,8 +133,6 @@
   "/AudioListener/positionZ": {},
   "/AudioListener/setOrientation": {},
   "/AudioListener/setPosition": {},
-  "/AudioListener/setVelocity": {},
-  "/AudioListener/speedOfSound": {},
   "/AudioListener/upX": {},
   "/AudioListener/upY": {},
   "/AudioListener/upZ": {},
