@@ -14,7 +14,9 @@ https://mohayonao.github.io/web-audio-api-spec-checker/
 
 ## Collected specifications
 ### Google Chrome
+- [chrome 54](specs/chrome-54.json)
 - [chrome 55](specs/chrome-55.json)
+- [chrome 56](specs/chrome-56.json)
 
 ### Mozilla Firefox
 - [firefox 50](specs/firefox-50.json)
