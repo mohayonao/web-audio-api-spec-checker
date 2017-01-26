@@ -79,8 +79,11 @@
     pushBaseClass(env["OfflineAudioContext"]);
     pushBaseClass(env["OscillatorNode"]);
     pushBaseClass(env["MediaElementAudioSourceNode"]);
+    pushBaseClass(env["AnalyserNode"]);
+    pushBaseClass(env["AudioNode"]);
 
     var classList = [
+      "EventTarget",
       "BaseAudioContext",
       "AudioContext",
       "OfflineAudioContext",
