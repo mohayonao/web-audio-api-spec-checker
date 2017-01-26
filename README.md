@@ -20,6 +20,7 @@ https://mohayonao.github.io/web-audio-api-spec-checker/
 
 ### Mozilla Firefox
 - [firefox 50](specs/firefox-50.json)
+- [firefox 51](specs/firefox-51.json)
 
 ### Apple Safari
 - [safari 10](specs/safari-10.json)
