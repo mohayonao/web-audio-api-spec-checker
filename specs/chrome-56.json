@@ -1,4 +1,9 @@
 {
+  "/EventTarget": { "global": "EventTarget", "protected": true },
+  "/EventTarget/addEventListener": {},
+  "/EventTarget/dispatchEvent": {},
+  "/EventTarget/removeEventListener": {},
+
   "/BaseAudioContext": { "global": "BaseAudioContext", "protected": true },
   "/BaseAudioContext/createAnalyser": {},
   "/BaseAudioContext/createBiquadFilter": {},
