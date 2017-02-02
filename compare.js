@@ -16,6 +16,13 @@ function deepEqual(a, b) {
 }
 
 function compare(specA, specB) {
+  if (typeof specB === "undefined") {
+    const [ name, version ] = specA.split("-");
+
+    specB = specA;
+    specA = `${ name }-${ version - 1 }`;
+  }
+
   specA = require(`./specs/${ specA }`);
   specB = require(`./specs/${ specB }`);
 
