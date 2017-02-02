@@ -23,8 +23,8 @@ function compare(specA, specB) {
     specA = `${ name }-${ version - 1 }`;
   }
 
-  specA = require(`./specs/${ specA }`);
-  specB = require(`./specs/${ specB }`);
+  specA = require(`./specs/${ specA }`).spec;
+  specB = require(`./specs/${ specB }`).spec;
 
   const report = { "add": [], "remove": [], "moved": [], "change": [] };
   const methods = [];
