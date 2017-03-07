@@ -16,16 +16,14 @@ https://mohayonao.github.io/web-audio-api-spec-checker/
 ### Google Chrome
 - [chrome 56](specs/chrome-56.json)
 - [chrome 55](specs/chrome-55.json)
-- [chrome 54](specs/chrome-54.json)
 
 ### Mozilla Firefox
+- [firefox 52](specs/firefox-52.json)
 - [firefox 51](specs/firefox-51.json)
-- [firefox 50](specs/firefox-50.json)
 
 ### Apple Safari
 - [safari 10](specs/safari-10.json)
 - [safari 9](specs/safari-9.json)
-- [safari 7](specs/safari-7.json)
 
 ### MS Edge
 - [edge 38](specs/edge-38.json)
