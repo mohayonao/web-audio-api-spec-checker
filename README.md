@@ -12,18 +12,18 @@ If you can help, please open the below link with your browser and copy it to [Is
 
 https://mohayonao.github.io/web-audio-api-spec-checker/
 
-## Collected specifications
+## Recently specifications
 ### Google Chrome
-- [chrome 56](specs/chrome-56.json)
-- [chrome 55](specs/chrome-55.json)
+- [chrome 57](specs/chrome-56.json) / 2017-03-09
+- [chrome 56](specs/chrome-56.json) / 2017-01-25
 
 ### Mozilla Firefox
-- [firefox 52](specs/firefox-52.json)
-- [firefox 51](specs/firefox-51.json)
+- [firefox 52](specs/firefox-52.json) / 2017-03-07
+- [firefox 51](specs/firefox-51.json) / 2017-01-24
 
 ### Apple Safari
-- [safari 10](specs/safari-10.json)
-- [safari 9](specs/safari-9.json)
+- [safari 10](specs/safari-10.json) / 2016-09-20
+- [safari 9](specs/safari-9.json)   / 2015-09-30
 
 ### MS Edge
-- [edge 38](specs/edge-38.json)
+- [edge 38](specs/edge-38.json) / 2016-08-02
