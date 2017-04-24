@@ -19,6 +19,7 @@ https://mohayonao.github.io/web-audio-api-spec-checker/
 - [chrome 56](specs/chrome-56.json) / 2017-01-25
 
 ### Mozilla Firefox
+- [firefox 53](specs/firefox-53.json) / 2017-04-19
 - [firefox 52](specs/firefox-52.json) / 2017-03-07
 - [firefox 51](specs/firefox-51.json) / 2017-01-24
 
