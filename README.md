@@ -19,9 +19,9 @@ https://mohayonao.github.io/web-audio-api-spec-checker/
 - [chrome 57](specs/chrome-57.json) / 2017-03-09
 
 ### Mozilla Firefox
+- [firefox 54](specs/firefox-54.json) / 2017-06-13
 - [firefox 53](specs/firefox-53.json) / 2017-04-19
 - [firefox 52](specs/firefox-52.json) / 2017-03-07
-- [firefox 51](specs/firefox-51.json) / 2017-01-24
 
 ### Apple Safari
 - [safari 10](specs/safari-10.json) / 2016-09-20
